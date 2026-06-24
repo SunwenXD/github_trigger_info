@@ -1,7 +1,7 @@
 import httpx
 import os
 
-WEBHOOK = os.environ["DISCORD_WEBHOOK_URL"]
+WEBHOOK = os.getenv("DISCORD_WEBHOOK_URL")
 
 
 def send_to_discord(title: str, summary: str, url: str):

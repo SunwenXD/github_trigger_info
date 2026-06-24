@@ -5,6 +5,8 @@ from summarize import summarize
 from discord import send_to_discord
 from state import load_state, save_state
 
+from dotenv import load_dotenv
+load_dotenv()
 
 def main():
     state = load_state()
