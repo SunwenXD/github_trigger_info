@@ -12,7 +12,7 @@ def main():
     state = load_state()
     version = fetch_latest_java_version()
 
-    if state.get("release") == version["release"]:
+    if state.get("release") == version["release"] and state.get("snapshot") == version["snapshot"]:
         return
 
     article = fetch_latest_article()
@@ -28,7 +28,7 @@ def main():
         article["url"],
     )
 
-    save_state({"release": version["release"]})
+    save_state(version)
 
 
 if __name__ == "__main__":

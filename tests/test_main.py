@@ -25,7 +25,7 @@ def _with_no_article(monkeypatch):
 
 
 def test_same_version_skips(monkeypatch, tmp_path):
-    _mock_deps(monkeypatch, tmp_path, state_content='{"release": "26.2"}')
+    _mock_deps(monkeypatch, tmp_path, state_content='{"release": "26.2", "snapshot": "26.3-snapshot-1"}')
 
     events = []
     monkeypatch.setattr("main.send_to_discord", lambda *a, **kw: events.append(("discord", a, kw)))
@@ -60,7 +60,7 @@ def test_no_article_skips_discord(monkeypatch, tmp_path):
 
 
 def test_different_version_proceeds(monkeypatch, tmp_path):
-    _mock_deps(monkeypatch, tmp_path, state_content='{"release": "26.1"}')
+    _mock_deps(monkeypatch, tmp_path, state_content='{"release": "26.1", "snapshot": "26.2-snapshot-1"}')
     _with_article(monkeypatch)
 
     events = []
@@ -83,7 +83,7 @@ def test_state_saved_after_success(monkeypatch, tmp_path):
     main()
     state_file = tmp_path / "state.json"
     import json
-    assert json.loads(state_file.read_text()) == {"release": "26.2"}
+    assert json.loads(state_file.read_text()) == {"release": "26.2", "snapshot": "26.3-snapshot-1"}
 
 
 def test_no_double_trigger(monkeypatch, tmp_path):
