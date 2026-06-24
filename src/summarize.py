@@ -1,23 +1,32 @@
 import httpx
 import os
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
 API_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+SYSTEM_PROMPT = (
+    "You are a Minecraft update analysis assistant. "
+    "Read the changelog carefully and extract ALL changes accurately. "
+    "Categorize them as New Features, Changes, Bug Fixes, or Technical Changes. "
+    "Preserve version numbers, block/item names, and technical details. "
+    "Output in Traditional Chinese. Be concise but complete."
+)
 
 
 def summarize(content: str):
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return content
 
     payload = {
         "model": "llama-3.1-8b-instant",
         "messages": [
             {
                 "role": "system",
-                "content": "你是Minecraft更新分析助手，請只輸出玩家重點。"
+                "content": SYSTEM_PROMPT,
             },
             {
                 "role": "user",
-                "content": content
+                "content": content,
             }
         ],
         "temperature": 0.2,
@@ -26,15 +35,19 @@ def summarize(content: str):
     r = httpx.post(
         API_URL,
         headers={
-            "Authorization": f"Bearer {GROQ_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         },
         json=payload,
         timeout=30,
     )
-    
 
-    return r.json()["choices"][0]["message"]["content"]
+    data = r.json()
+    choices = data.get("choices")
+    if not choices:
+        return content
+
+    return choices[0]["message"]["content"]
 
 
 if __name__ == "__main__":

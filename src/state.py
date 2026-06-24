@@ -8,7 +8,11 @@ def load_state():
     if not STATE_FILE.exists():
         return {}
 
-    return json.loads(STATE_FILE.read_text())
+    text = STATE_FILE.read_text().strip()
+    if not text:
+        return {}
+
+    return json.loads(text)
 
 
 def save_state(state: dict):
