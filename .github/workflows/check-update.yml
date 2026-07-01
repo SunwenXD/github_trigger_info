@@ -1,5 +1,8 @@
 name: minecraft-update
 
+concurrency:
+  group: minecraft-update
+  cancel-in-progress: false
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -34,4 +37,5 @@ jobs:
           git config user.email github-actions@github.com
           git add state.json
           git commit -m "update state" || exit 0
-          git push
+          git pull --rebase origin main
+          git push origin main
