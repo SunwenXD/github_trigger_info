@@ -12,7 +12,7 @@ def _mock_deps(monkeypatch, tmp_path, state_content=None):
         state_file.write_text("")
 
     monkeypatch.setattr("state.STATE_FILE", state_file)
-    monkeypatch.setattr("version.fetch_latest_java_version", lambda: {"release": "26.2", "snapshot": "26.3-snapshot-1"})
+    monkeypatch.setattr("main.fetch_latest_java_version", lambda: {"release": "26.2", "snapshot": "26.3-snapshot-1"})
     monkeypatch.setattr(os, "getenv", lambda k, d=None: "")
 
 
